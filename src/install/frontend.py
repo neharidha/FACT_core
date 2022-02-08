@@ -7,8 +7,8 @@ import requests
 from common_helper_process import execute_shell_command_get_return_code
 
 from helperFunctions.install import (
-    InstallationError, OperateInDirectory, apt_install_packages, dnf_install_packages, install_pip_packages, load_main_config, remove_folder,
-    run_cmd_with_logging
+    InstallationError, OperateInDirectory, apt_install_packages, dnf_install_packages, install_pip_packages,
+    load_main_config, remove_folder, run_cmd_with_logging
 )
 
 DEFAULT_CERT = '.\n.\n.\n.\n.\nexample.com\n.\n\n\n'
@@ -61,7 +61,7 @@ def _create_directory_for_authentication():  # pylint: disable=invalid-name
     logging.info('Creating directory for authentication')
 
     config = load_main_config()
-    dburi = config.get('data_storage', 'user_database')
+    dburi = config.get('data-storage', 'user-database')
     # pylint: disable=fixme
     factauthdir = '/'.join(dburi.split('/')[:-1])[10:]  # FIXME this should be beautified with pathlib
 
