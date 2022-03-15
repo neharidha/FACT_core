@@ -99,6 +99,10 @@ class Config(BaseModel, extra=Extra.allow):
 
 
 def load_config(path=None):
+    """Load the config file located at `path`.
+    The file must be an ini file and is read into an `config.Config` instance.
+    This instance can be accessed with `config.cfg` after calling this function.
+    """
     if path is None:
         path = Path(__file__).parent / 'config/main.cfg'
 
@@ -111,17 +115,21 @@ def load_config(path=None):
     parsed_sections['unpack']['whitelist'] = _parse_comma_separated_list(parser._sections['unpack']['whitelist'])
     parsed_sections['default-plugins']['default'] = _parse_comma_separated_list(parser._sections['default-plugins']['default'])
     parsed_sections['default-plugins']['minimal'] = _parse_comma_separated_list(parser._sections['default-plugins']['minimal'])
-
-    # Replace hypens with underscores in key names as hypens may not be contained in identifiers
-    for section in list(parsed_sections.keys()):
-        for key in list(parsed_sections[section].keys()):
-            parsed_sections[section][key.replace('-', '_')] = parsed_sections[section].pop(key)
-        parsed_sections[section.replace('-', '_')] = parsed_sections.pop(section)
+    # hyphens may not be contained in identifiers
+    # plugin names may also not contain hyphens, so this is fine
+    _replace_hyphens_with_underscores(parsed_sections)
 
     global _cfg
     global _configparser_cfg
     _configparser_cfg = parser
     _cfg = Config(**parsed_sections)
+
+
+def _replace_hyphens_with_underscores(sections):
+    for section in list(sections.keys()):
+        for key in list(sections[section].keys()):
+            sections[section][key.replace('-', '_')] = sections[section].pop(key)
+        sections[section.replace('-', '_')] = sections.pop(section)
 
 
 def _parse_comma_separated_list(list_string):
