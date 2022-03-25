@@ -1,7 +1,8 @@
 from pathlib import Path
 
+import pytest
+
 from objects.file import FileObject
-from test.unit.analysis.analysis_plugin_test_class import AnalysisPluginTest  # pylint: disable=wrong-import-order
 
 from ..code.device_tree import AnalysisPlugin
 
@@ -10,18 +11,14 @@ TEST_FILE = TEST_DATA / 'device_tree.dtb'
 EXPECTED_RESULT = 'model = "Manufac XYZ1234ABC";'
 
 
-class TestDeviceTree(AnalysisPluginTest):
+@pytest.mark.AnalysisPluginClass(lambda: AnalysisPlugin)
+def test_process_object(analysis_plugin):
+    test_object = FileObject()
+    test_object.processed_analysis['file_type'] = {'mime': 'linux/device-tree'}
+    test_object.file_path = str(TEST_FILE)
+    result = analysis_plugin.process_object(test_object)
 
-    PLUGIN_NAME = AnalysisPlugin.NAME
-    PLUGIN_CLASS = AnalysisPlugin
-
-    def test_process_object(self):
-        test_object = FileObject()
-        test_object.processed_analysis['file_type'] = {'mime': 'linux/device-tree'}
-        test_object.file_path = str(TEST_FILE)
-        result = self.analysis_plugin.process_object(test_object)
-
-        assert result.processed_analysis[self.PLUGIN_NAME]['summary'] == ['device tree found']
+    assert result.processed_analysis[analysis_plugin.NAME]['summary'] == ['device tree found']
 
 
 def test_convert_device_tree():
