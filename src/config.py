@@ -56,12 +56,8 @@ class Unpack(BaseModel, extra=Extra.forbid):
     memory_limit: int = 1024  # TODO
 
 
-# TODO cusom names here?!
-class DefaultPlugins(BaseModel, extra=Extra.forbid):
-    default: list
-    minimal: list
-    # TODO
-    # custom = init_systems, printable_strings
+class DefaultPlugins(BaseModel, extra=Extra.allow):
+    pass
 
 
 class Database(BaseModel, extra=Extra.forbid):
@@ -113,10 +109,12 @@ def load_config(path=None):
     # TODO We should really not use private API of ConfigParser but whatever
     parsed_sections = deepcopy(parser._sections)
     parsed_sections['unpack']['whitelist'] = _parse_comma_separated_list(parser._sections['unpack']['whitelist'])
-    parsed_sections['default-plugins']['default'] = _parse_comma_separated_list(parser._sections['default-plugins']['default'])
-    parsed_sections['default-plugins']['minimal'] = _parse_comma_separated_list(parser._sections['default-plugins']['minimal'])
+    for plugin_set in parsed_sections['default-plugins']:
+        parsed_sections['default-plugins'][plugin_set] = _parse_comma_separated_list(parser._sections['default-plugins'][plugin_set])
+
     # hyphens may not be contained in identifiers
     # plugin names may also not contain hyphens, so this is fine
+    # TODO what about default-plugins?
     _replace_hyphens_with_underscores(parsed_sections)
 
     global _cfg
