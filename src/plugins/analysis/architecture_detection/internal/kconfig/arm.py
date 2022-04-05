@@ -1,4 +1,4 @@
-from ..kconfig import _kconfig_contains
+from ..kconfig import kconfig_contains
 
 # Based on Linux Kernel 5.9
 
@@ -90,18 +90,18 @@ has64bit = _arm64
 
 def construct_result(kconfig_str):
     result_str = ''
-    if _kconfig_contains(kconfig_str, armv4):
+    if kconfig_contains(kconfig_str, armv4):
         result_str += ', armv4'
-    if _kconfig_contains(kconfig_str, armv5):
+    if kconfig_contains(kconfig_str, armv5):
         result_str += ', armv5'
-    if _kconfig_contains(kconfig_str, armv6):
+    if kconfig_contains(kconfig_str, armv6):
         result_str += ', armv6'
-    if _kconfig_contains(kconfig_str, armv7):
+    if kconfig_contains(kconfig_str, armv7):
         result_str += ', armv7'
-    if _kconfig_contains(kconfig_str, armv8):
+    if kconfig_contains(kconfig_str, armv8):
         result_str += ', armv8'
 
-    if _kconfig_contains(kconfig_str, has64bit):
+    if kconfig_contains(kconfig_str, has64bit):
         result_str += ', 64-bit'
 
     if len(result_str) == 0:

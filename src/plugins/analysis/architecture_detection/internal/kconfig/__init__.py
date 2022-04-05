@@ -1,4 +1,4 @@
-def _kconfig_contains(kconfig: str, options):
+def kconfig_contains(kconfig: str, options):
     for line in kconfig.splitlines():
         if line[-2:] != '=y':
             continue

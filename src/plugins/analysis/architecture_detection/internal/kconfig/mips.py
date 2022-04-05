@@ -1,4 +1,4 @@
-from ..kconfig import _kconfig_contains
+from ..kconfig import kconfig_contains
 
 # Based on Linux Kernel 5.9
 
@@ -31,16 +31,16 @@ has64bit = _mips64_v1 + _mips64_v2 + _mips64_v5 + _mips64_v6
 def construct_result(kconfig_str):
     result_str = ''
 
-    if _kconfig_contains(kconfig_str, mips_v1):
+    if kconfig_contains(kconfig_str, mips_v1):
         result_str += ', mips_v1'
-    if _kconfig_contains(kconfig_str, mips_v2):
+    if kconfig_contains(kconfig_str, mips_v2):
         result_str += ', mips_v2'
-    if _kconfig_contains(kconfig_str, mips_v5):
+    if kconfig_contains(kconfig_str, mips_v5):
         result_str += ', mips_v5'
-    if _kconfig_contains(kconfig_str, mips_v6):
+    if kconfig_contains(kconfig_str, mips_v6):
         result_str += ', mips_v6'
 
-    if _kconfig_contains(kconfig_str, has64bit):
+    if kconfig_contains(kconfig_str, has64bit):
         result_str += ', 64-bit'
 
     if len(result_str) == 0:
