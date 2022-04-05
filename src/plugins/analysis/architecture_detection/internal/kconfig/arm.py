@@ -85,7 +85,7 @@ armv6 = _armv6 + _armv6k + _armv6_multi
 armv7 = _armv7 + _armv7m + _armv7_multi
 armv8 = _armv8_1 + _armv8_2 + _armv8_3 + _armv8_4 + _armv8_5
 
-has64bit = _arm64 + armv8
+has64bit = _arm64
 
 
 def construct_result(kconfig_str):
