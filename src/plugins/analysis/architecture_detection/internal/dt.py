@@ -31,6 +31,7 @@ def _get_compatible_entry(dts: str) -> Union[str, None]:
     compatible = None
     dt_path = None
 
+    # The yaml output is a bit wired, we have to "unpack" one level to get to the actual nodes
     for x in dt_yaml:
         if 'cpus' not in x:
             continue
@@ -52,6 +53,10 @@ def _get_compatible_entry(dts: str) -> Union[str, None]:
         dt_path = f'/cpus/{cpu_name}/compatible'
         break
 
+    # Some device-trees seem to not have a "/cpus" node
+    if compatible is None:
+        return None
+
     return f'{dt_path}: {compatible[0]}'
 
 
@@ -59,9 +64,14 @@ def construct_result(file_object):
     result = {}
     for dt_dict in file_object.processed_analysis.get('device_tree', {}).get('device_trees', []):
         dt = dt_dict['device_tree']
+
+        compatible_entry = _get_compatible_entry(dt)
+        if compatible_entry is None:
+            continue
+
         result.update(
             {
-                _get_compatible_entry(dt): 'DeviceTree',
+                compatible_entry: 'DeviceTree',
             },
         )
 
