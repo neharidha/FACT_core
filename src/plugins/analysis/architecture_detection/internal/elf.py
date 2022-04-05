@@ -4,29 +4,25 @@ from elftools.elf.descriptions import describe_attr_tag_arm
 from elftools.elf.elffile import ELFFile
 
 
+FLAGS_TO_STR = {
+    E_FLAGS.EF_MIPS_ARCH_1: 'MIPS I',
+    E_FLAGS.EF_MIPS_ARCH_2: 'MIPS II',
+    E_FLAGS.EF_MIPS_ARCH_3: 'MIPS III',
+    E_FLAGS.EF_MIPS_ARCH_4: 'MIPS IV',
+    E_FLAGS.EF_MIPS_ARCH_5: 'MIPS V',
+    E_FLAGS.EF_MIPS_ARCH_32: 'MIPS 32bit',
+    E_FLAGS.EF_MIPS_ARCH_64: 'MIPS 64bit',
+    E_FLAGS.EF_MIPS_ARCH_32R2: 'MIPS 32bit R2',
+    E_FLAGS.EF_MIPS_ARCH_64R2: 'MIPS 64bit R2',
+}
+
+
 def _mips_flags_to_str(flags):
-    result = ''
-    if (flags & E_FLAGS.EF_MIPS_ARCH) == E_FLAGS.EF_MIPS_ARCH_1:
-        result += ', MIPS I'
-    if (flags & E_FLAGS.EF_MIPS_ARCH) == E_FLAGS.EF_MIPS_ARCH_2:
-        result += ', MIPS II'
-    if (flags & E_FLAGS.EF_MIPS_ARCH) == E_FLAGS.EF_MIPS_ARCH_3:
-        result += ', MIPS III'
-    if (flags & E_FLAGS.EF_MIPS_ARCH) == E_FLAGS.EF_MIPS_ARCH_4:
-        result += ', MIPS IV'
-    if (flags & E_FLAGS.EF_MIPS_ARCH) == E_FLAGS.EF_MIPS_ARCH_5:
-        result += ', MIPS V'
-
-    if (flags & E_FLAGS.EF_MIPS_ARCH) == E_FLAGS.EF_MIPS_ARCH_32:
-        result += ', MIPS 32bit'
-    if (flags & E_FLAGS.EF_MIPS_ARCH) == E_FLAGS.EF_MIPS_ARCH_64:
-        result += ', MIPS 64bit'
-    if (flags & E_FLAGS.EF_MIPS_ARCH) == E_FLAGS.EF_MIPS_ARCH_32R2:
-        result += ', MIPS 32bit R2'
-    if (flags & E_FLAGS.EF_MIPS_ARCH) == E_FLAGS.EF_MIPS_ARCH_64R2:
-        result += ', MIPS 64bit R2'
-
-    return result[2:]
+    return ', '.join((
+        arch_str
+        for arch_flags, arch_str in FLAGS_TO_STR.items()
+        if (flags & E_FLAGS.EF_MIPS_ARCH) == arch_flags
+    ))
 
 
 def _get_mips_isa(elffile):
