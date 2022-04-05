@@ -50,9 +50,7 @@ def test_kconfig_construct_result():
     fo = FileObject()
     fo.processed_analysis.update(_mock_kernel_config_analysis_mips)
 
-    print(fo.processed_analysis)
     result = kconfig.construct_result(fo)
-    print(result)
     for key in result:
         assert 'mips_v2' in key
         assert '64-bit' not in key
@@ -60,9 +58,7 @@ def test_kconfig_construct_result():
     fo = FileObject()
     fo.processed_analysis.update(_mock_kernel_config_analysis_arm)
 
-    print(fo.processed_analysis)
     result = kconfig.construct_result(fo)
-    print(result)
     for key in result:
         assert 'armv7' in key
         assert '64-bit' not in key
