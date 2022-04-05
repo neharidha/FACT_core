@@ -22,19 +22,13 @@ _mock_device_tree_analysis = {
 
 _mock_kernel_config_analysis_mips = {
     'kernel_config': {
-        'kernel_config':
-            r'''
-CONFIG_CPU_MIPS32_R2=y
-            '''
+        'kernel_config': 'CONFIG_CPU_MIPS32_R2=y\n',
     }
 }
 
 _mock_kernel_config_analysis_arm = {
     'kernel_config': {
-        'kernel_config':
-            r'''
-CONFIG_CPU_V7=y
-            '''
+        'kernel_config': 'CONFIG_CPU_V7=y\n',
     }
 }
 
@@ -65,7 +59,7 @@ def test_kconfig_construct_result():
 
 
 def test_elf_construct_result(monkeypatch):
-    class MockFSOrganizer():
+    class MockFSOrganizer:
         generate_path = None
 
     mock_fs_organizer = MockFSOrganizer()
