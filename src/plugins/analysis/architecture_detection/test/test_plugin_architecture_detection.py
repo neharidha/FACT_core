@@ -4,8 +4,7 @@ from pathlib import Path
 
 from objects.file import FileObject
 
-from ..code.architecture_detection import MetaDataDetector
-from ..internal import dt, elf, kconfig
+from ..internal import dt, elf, kconfig, metadata
 
 with open(Path(__file__).parent / 'data/dt.dts') as dt_file:
     dts = dt_file.read()
@@ -58,7 +57,7 @@ def test_kconfig_construct_result():
         assert '64-bit' not in key
 
 
-def test_elf_construct_result(monkeypatch):
+def test_elf_construct_result():
     class MockFSOrganizer:
         generate_path = None
 
@@ -153,8 +152,7 @@ def test_metadatadetector_get_device_architecture():
 
 def _get_device_architecture_wrapper(architecture, bitness, endianness, full_file_type):
     fo = FileObject()
-    detector = MetaDataDetector()
     fo.processed_analysis['file_type'] = {'mime': 'x-executable', 'full': full_file_type}
 
-    result = detector.get_device_architecture(fo)
+    result = metadata.construct_result(fo)
     assert f'{architecture}, {bitness}, {endianness} (M)' in result, f'architecture not correct: expected {architecture}'
