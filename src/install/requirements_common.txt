@@ -22,6 +22,8 @@ ssdeep
 sqlalchemy
 xmltodict
 yara-python
+# Config validation
+pydantic
 
 git+https://github.com/fkie-cad/fact_helper_file.git
 
