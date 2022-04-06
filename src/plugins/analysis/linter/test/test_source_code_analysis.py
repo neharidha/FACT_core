@@ -23,7 +23,8 @@ def test_object():
 
 
 @pytest.fixture(scope='function')
-def stub_plugin(monkeypatch):
+def stub_plugin(monkeypatch, patch_cfg):
+    _ = patch_cfg
     return AnalysisPlugin(MockAdmin(), offline_testing=True, view_updater=CommonDatabaseMock())
 
 
