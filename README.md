@@ -116,4 +116,3 @@ We've been happy to show FACT in a number of BlackHat Arsenal sessions.
     
     Some plug-ins may have different licenses. If so, a license file is provided in the plug-in's folder.
 ```
-test
