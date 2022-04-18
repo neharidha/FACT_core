@@ -1,5 +1,9 @@
 from ipaddress import ip_address
 from dns import resolver
+import whois
+import time, pprint, datetime
+from ipwhois.net import Net
+from ipwhois.asn import IPASN
 
 from analysis.PluginBase import AnalysisBasePlugin
 from helperFunctions.compare_sets import substring_is_in_list
@@ -33,9 +37,13 @@ class AnalysisPlugin(AnalysisBasePlugin):
 					data = data[0]
 				if key == 'uris':
 					data = self.get_domains_from_uri(data)
-					final_data[data] = self.get_ips_from_domain(data)
+					final_data[data] = {}
+					final_data[data]['dns'] = self.get_ips_from_domain(data)
+					final_data[data]['whois'] = self.get_domain_whois(data)
 				elif key == 'ips_v4':
-					final_data[data] = self.get_domains_from_ip(data)
+					final_data[data] = {}
+					final_data[data]['dns'] = self.get_domains_from_ip(data)
+					final_data[data]['whois'] = self.get_ip_whois(data)
 		print(f'##################\n\n{final_data}\n\n################')
 		file_object.processed_analysis[self.NAME] = final_data #self._get_augmented_result(result)
 		return file_object
@@ -66,6 +74,20 @@ class AnalysisPlugin(AnalysisBasePlugin):
 			domains.append(str(domain))
 
 		return domains
+	
+	def get_ip_whois(self, ip):
+		return pprint.pformat(IPASN(Net(ip)).lookup())
+		
+	def get_domain_whois(self, domain):
+		data_dict = whois.query(domain).__dict__
+		for key, value in data_dict.items():
+			if type(value) == set:
+				data_dict[key] = list(data_dict[key])
+			elif type(value) == datetime.datetime:
+				data_dict[key] = value.strftime("%m-%d-%y %H:%M")
+		if 'statuses' in data_dict:
+			data_dict.pop('statuses')
+		return pprint.pformat(data_dict)
 		
 		
 	def _get_augmented_result(self, result):
